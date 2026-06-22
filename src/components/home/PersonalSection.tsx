@@ -1,18 +1,15 @@
 import type { PersonalProfile } from "@/i18n/types";
 import { Reveal } from "@/components/motion/Reveal";
 import { TvShowCarousel } from "@/components/about/TvShowCarousel";
+import { TravelFootprintSection } from "@/components/about/TravelFootprintSection";
+import { HobbiesSection } from "@/components/about/HobbiesSection";
+import { MovieCarousel } from "@/components/about/MovieCarousel";
 
 interface PersonalSectionProps {
   personal: PersonalProfile;
 }
 
 export function PersonalSection({ personal }: PersonalSectionProps) {
-  const rows = [
-    { label: personal.labels.hobbies, value: personal.hobbies },
-    { label: personal.labels.cities, value: personal.cities },
-    { label: personal.labels.movies, value: personal.movies },
-  ];
-
   return (
     <section className="pb-16 lg:pb-24">
       <div className="editorial-container">
@@ -23,26 +20,24 @@ export function PersonalSection({ personal }: PersonalSectionProps) {
           <p className="aw-body mt-4">{personal.intro}</p>
         </Reveal>
 
+        <HobbiesSection
+          label={personal.labels.hobbies}
+          caption={personal.hobbiesCaption}
+          items={personal.hobbyItems}
+        />
+
+        <MovieCarousel
+          label={personal.labels.movies}
+          caption={personal.moviesCaption}
+          items={personal.movieItems}
+        />
+
         <TvShowCarousel
           label={personal.labels.tvShows}
           items={personal.tvShowItems}
         />
 
-        <div className="mt-10 grid gap-3 sm:mt-12 sm:grid-cols-3 sm:gap-4">
-          {rows.map((row) => (
-            <div
-              key={row.label}
-              className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 p-5 sm:p-6"
-            >
-              <p className="aw-label mb-2 text-[var(--color-text-dim)]">
-                {row.label}
-              </p>
-              <p className="text-sm leading-relaxed text-[var(--color-text-secondary)] sm:text-[15px]">
-                {row.value}
-              </p>
-            </div>
-          ))}
-        </div>
+        <TravelFootprintSection footprint={personal.travelFootprint} />
       </div>
     </section>
   );

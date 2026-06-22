@@ -27,6 +27,73 @@ export interface TvShowItem {
   tags: string;
   accent: string;
   accentEnd: string;
+  photo: string;
+}
+
+export interface TravelCity {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  visited: boolean;
+  province: string;
+  country: string;
+  days?: number;
+  visitDate?: string;
+  note?: string;
+  photo?: string;
+  accent?: string;
+}
+
+export interface TravelFootprint {
+  title: string;
+  caption: string;
+  travelSlogan: string;
+  stats: {
+    cities: string;
+    provinces: string;
+    countries: string;
+    mileage: string;
+    citiesValue: string;
+    provincesValue: string;
+    countriesValue: string;
+    mileageValue: string;
+  };
+  controls: {
+    autoRotateOn: string;
+    autoRotateOff: string;
+    resetView: string;
+    globeHint: string;
+  };
+  tooltip: {
+    days: string;
+    visited: string;
+    wishlist: string;
+    visitDate: string;
+  };
+  listHeading: string;
+  listVisited: string;
+  listWishlist: string;
+  cities: TravelCity[];
+}
+
+export interface HobbyItem {
+  id: string;
+  label: string;
+  note: string;
+  accent: string;
+  accentEnd: string;
+}
+
+export interface MovieItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  tags: string;
+  note: string;
+  accent: string;
+  accentEnd: string;
+  photo: string;
 }
 
 export interface PersonalProfile {
@@ -38,10 +105,12 @@ export interface PersonalProfile {
     tvShows: string;
     movies: string;
   };
-  hobbies: string;
-  cities: string;
+  hobbiesCaption: string;
+  hobbyItems: HobbyItem[];
+  moviesCaption: string;
   tvShowItems: TvShowItem[];
-  movies: string;
+  movieItems: MovieItem[];
+  travelFootprint: TravelFootprint;
 }
 
 export interface Dictionary {

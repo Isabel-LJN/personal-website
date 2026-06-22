@@ -3,15 +3,16 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import type { TvShowItem } from "@/i18n/types";
+import type { MovieItem } from "@/i18n/types";
 import { Reveal } from "@/components/motion/Reveal";
 
-interface TvShowCarouselProps {
+interface MovieCarouselProps {
   label: string;
-  items: TvShowItem[];
+  caption: string;
+  items: MovieItem[];
 }
 
-export function TvShowCarousel({ label, items }: TvShowCarouselProps) {
+export function MovieCarousel({ label, caption, items }: MovieCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
@@ -32,7 +33,7 @@ export function TvShowCarousel({ label, items }: TvShowCarouselProps) {
   const scroll = (dir: -1 | 1) => {
     const el = trackRef.current;
     if (!el) return;
-    const card = el.querySelector<HTMLElement>("[data-tv-card]");
+    const card = el.querySelector<HTMLElement>("[data-movie-card]");
     const step = card ? card.offsetWidth + 16 : el.clientWidth * 0.85;
     el.scrollBy({ left: dir * step, behavior: "smooth" });
     window.setTimeout(updateArrows, 380);
@@ -41,7 +42,12 @@ export function TvShowCarousel({ label, items }: TvShowCarouselProps) {
   return (
     <Reveal className="mt-10 sm:mt-12">
       <div className="mb-5 flex items-end justify-between gap-4">
-        <p className="aw-label text-[var(--color-text-dim)]">{label}</p>
+        <div>
+          <p className="aw-label text-[var(--color-text-dim)]">{label}</p>
+          <p className="mt-2 max-w-xl text-sm text-[var(--color-text-secondary)]">
+            {caption}
+          </p>
+        </div>
         <div className="flex shrink-0 gap-2">
           <CarouselButton
             direction="prev"
@@ -61,15 +67,15 @@ export function TvShowCarousel({ label, items }: TvShowCarouselProps) {
         onScroll={updateArrows}
         className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-8 sm:gap-5 sm:px-8 lg:-mx-10 lg:px-10 [&::-webkit-scrollbar]:hidden"
       >
-        {items.map((show) => (
+        {items.map((movie) => (
           <article
-            key={show.id}
-            data-tv-card
+            key={movie.id}
+            data-movie-card
             className="w-[min(78vw,300px)] shrink-0 snap-start sm:w-[320px]"
           >
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
               <Image
-                src={show.photo}
+                src={movie.photo}
                 alt=""
                 fill
                 className="object-cover"
@@ -78,19 +84,22 @@ export function TvShowCarousel({ label, items }: TvShowCarouselProps) {
               <div
                 className="absolute inset-0"
                 style={{
-                  background: `linear-gradient(to top, ${show.accentEnd}ee 0%, ${show.accent}88 45%, transparent 100%)`,
+                  background: `linear-gradient(to top, ${movie.accentEnd}ee 0%, ${movie.accent}88 45%, transparent 100%)`,
                 }}
               />
               <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-7">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
-                  {show.tags}
+                  {movie.tags}
                 </span>
                 <div>
                   <h3 className="text-[clamp(1.25rem,3.8vw,1.65rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
-                    {show.title}
+                    {movie.title}
                   </h3>
                   <p className="mt-1.5 text-xs font-medium tracking-wide text-white/75">
-                    {show.subtitle}
+                    {movie.subtitle}
+                  </p>
+                  <p className="mt-3 line-clamp-2 text-xs leading-relaxed text-white/85">
+                    {movie.note}
                   </p>
                 </div>
               </div>

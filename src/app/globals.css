@@ -200,6 +200,23 @@
     margin-top: 0.25rem;
   }
 
+  .travel-globe-panel {
+    background:
+      radial-gradient(circle at 50% 35%, rgba(241, 229, 0, 0.08) 0%, transparent 55%),
+      radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.04) 0%, transparent 50%),
+      linear-gradient(
+        180deg,
+        rgba(250, 248, 244, 0.35) 0%,
+        rgba(232, 228, 220, 0.15) 100%
+      );
+  }
+
+  .traveled-globe-canvas {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      0 12px 40px rgba(30, 42, 90, 0.06);
+  }
+
   /* About page — cosmic hero */
   .about-hero-label {
     border-color: rgba(213, 85, 89, 0.25);
