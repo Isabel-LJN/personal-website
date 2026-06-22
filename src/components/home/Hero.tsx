@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { HeroFluidField } from "@/components/home/HeroFluidField";
 import type { Dictionary } from "@/i18n/types";
 import type { Locale } from "@/i18n/config";
 
@@ -40,46 +41,50 @@ export function Hero({ locale, dict }: HeroProps) {
   }, [reduce]);
 
   return (
-    <section className="relative flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center px-5 pb-24 pt-8 text-center sm:min-h-[calc(100vh-4rem)]">
-      <motion.div
-        className="mb-6 flex flex-wrap items-center justify-center gap-3 aw-label text-[var(--color-text-dim)]"
-        initial={false}
-        animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-        transition={{ duration: 0.6, ease }}
-      >
-        <span>{today}</span>
-        <span className="text-black/15">|</span>
-        <span>{hero.greeting}</span>
-      </motion.div>
+    <section
+      className="hero-section relative flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center px-5 pb-24 pt-8 text-center sm:min-h-[calc(100vh-4rem)]"
+    >
+      <HeroFluidField />
 
-      <div className="overflow-hidden">
+      <div className="relative z-10 flex flex-col items-center">
+        <motion.div
+          className="mb-6 flex flex-wrap items-center justify-center gap-3 aw-label text-[var(--color-text-dim)]"
+          initial={false}
+          animate={ready ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, ease }}
+        >
+          <span>{today}</span>
+          <span className="text-black/15">|</span>
+          <span>{hero.greeting}</span>
+        </motion.div>
+
         <motion.h1
           className="aw-title text-balance"
           initial={false}
-          animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: "100%" }}
+          animate={ready ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.9, delay: 0.05, ease }}
         >
           {dict.meta.siteName}
         </motion.h1>
+
+        <motion.p
+          className="aw-body mx-auto mt-8 max-w-lg"
+          initial={false}
+          animate={ready ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.75, delay: 0.18, ease }}
+        >
+          {hero.subline}
+        </motion.p>
+
+        <motion.p
+          className="aw-label mt-10 text-[var(--color-text-dim)]"
+          initial={false}
+          animate={ready ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.32, ease }}
+        >
+          {dict.meta.authorTagline}
+        </motion.p>
       </div>
-
-      <motion.p
-        className="aw-body mx-auto mt-8 max-w-lg"
-        initial={false}
-        animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.75, delay: 0.18, ease }}
-      >
-        {hero.subline}
-      </motion.p>
-
-      <motion.p
-        className="aw-label mt-10 text-[var(--color-text-dim)]"
-        initial={false}
-        animate={ready ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 0.6, delay: 0.32, ease }}
-      >
-        {dict.meta.authorTagline}
-      </motion.p>
     </section>
   );
 }
