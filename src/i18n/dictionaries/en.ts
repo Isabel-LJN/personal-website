@@ -139,16 +139,37 @@ const en: Dictionary = {
   about: {
     metaTitle: "Profile",
     metaDescription:
-      "About Isabel — slogan, hobbies, favorite shows, films, and cities visited.",
+      "About Isabel — basics, hobbies, favorite shows, films, and cities visited.",
     subtitle: "Profile",
-    title: "Off-screen me",
-    description:
-      "Building is one layer. Here's what I enjoy when I'm not in the repo.",
+    title: "Who I am",
     personal: {
-      slogan:
-        "Independent builder · Ship small useful tools · Write down what sticks",
-      intro:
-        "Days go to product work, SEO, and AI experiments; evenings to music, food hunts, and catching up on shows. No pitch deck — just the personal bits.",
+      facts: [
+        {
+          id: "name",
+          label: "English name",
+          value: "Isabel",
+        },
+        {
+          id: "birthday",
+          label: "Date of birth",
+          value: "February 28, 2004",
+        },
+        {
+          id: "school",
+          label: "Education",
+          value: "Tianjin University of Science and Technology",
+        },
+        {
+          id: "major",
+          label: "Major",
+          value: "Computer Science and Technology (Information Processing)",
+        },
+        {
+          id: "location",
+          label: "Based in",
+          value: "Bantian, Shenzhen",
+        },
+      ],
       labels: {
         hobbies: "Hobbies",
         cities: "Cities visited",

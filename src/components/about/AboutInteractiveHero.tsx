@@ -2,76 +2,66 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { AboutCosmicScene } from "@/components/about/AboutCosmicScene";
+import type { PersonalFact } from "@/i18n/types";
 
 interface AboutInteractiveHeroProps {
-  label: string;
   title: string;
-  description?: string;
+  facts: PersonalFact[];
 }
 
-export function AboutInteractiveHero({
-  label,
-  title,
-  description,
-}: AboutInteractiveHeroProps) {
+export function AboutInteractiveHero({ title, facts }: AboutInteractiveHeroProps) {
   const reduce = useReducedMotion();
+  const ease = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <section className="about-hero pt-10 pb-10 sm:pt-12 sm:pb-12 lg:pt-14 lg:pb-14">
+    <section className="pt-10 pb-10 sm:pt-12 sm:pb-12">
       <div className="editorial-container">
-        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,42%)] lg:gap-10 xl:gap-14">
-          <div className="relative z-10 min-w-0">
-            <motion.p
-              className="about-hero-label aw-label mb-6 inline-flex items-center gap-2 rounded-full border px-3 py-1.5"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <span className="about-hero-label-dot" aria-hidden />
-              {label}
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.75,
-                delay: 0.06,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              <h1 className="aw-title max-w-[16ch] text-balance">{title}</h1>
-            </motion.div>
-
-            {description && (
-              <motion.p
-                className="aw-body mt-8 max-w-xl text-balance"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.65,
-                  delay: 0.14,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                {description}
-              </motion.p>
-            )}
-          </div>
-
+        <div className="max-w-2xl">
           <motion.div
-            className="relative lg:pt-6"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.8,
-              delay: reduce ? 0 : 0.12,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease }}
           >
-            <AboutCosmicScene />
+            <h1 className="aw-headline text-balance">{title}</h1>
           </motion.div>
         </div>
+
+        <motion.ul
+          className="mt-8 grid max-w-4xl gap-3 sm:grid-cols-2 lg:grid-cols-3"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease }}
+        >
+          {facts.map((fact, index) => (
+            <motion.li
+              key={fact.id}
+              className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/80 px-5 py-4 backdrop-blur-sm"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.12 + index * 0.05, ease }}
+            >
+              <p className="aw-label mb-1.5 text-[var(--color-text-dim)]">
+                {fact.label}
+              </p>
+              <p className="text-sm font-semibold leading-snug text-[var(--color-foreground)] sm:text-[15px]">
+                {fact.value}
+              </p>
+            </motion.li>
+          ))}
+        </motion.ul>
+
+        <motion.div
+          className="mt-10 max-w-4xl sm:mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.75,
+            delay: reduce ? 0 : 0.28,
+            ease,
+          }}
+        >
+          <AboutCosmicScene />
+        </motion.div>
       </div>
     </section>
   );

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import type { TravelFootprint, TravelCity } from "@/i18n/types";
 import { Reveal } from "@/components/motion/Reveal";
 import { TravelGlobeLazy } from "@/components/about/TravelGlobeLazy";
+import { AboutSectionHeading } from "@/components/about/AboutSectionHeading";
 
 interface TravelFootprintSectionProps {
   footprint: TravelFootprint;
@@ -48,13 +49,10 @@ export function TravelFootprintSection({ footprint }: TravelFootprintSectionProp
     <Reveal className="mt-12 sm:mt-16">
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="aw-label mb-2 text-[var(--color-text-dim)]">
-            {footprint.title}
-          </p>
-          <p className="text-base font-medium text-[var(--color-foreground)] sm:text-lg">
+          <AboutSectionHeading title={footprint.title} caption={footprint.caption} />
+          <p className="mt-3 pl-5 text-base font-medium text-[var(--color-foreground)] sm:text-lg">
             {footprint.travelSlogan}
           </p>
-          <p className="aw-body mt-2 max-w-xl text-sm">{footprint.caption}</p>
         </div>
 
         <div className="flex flex-wrap gap-2">

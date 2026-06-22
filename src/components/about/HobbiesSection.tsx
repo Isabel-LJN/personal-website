@@ -4,6 +4,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { HobbyItem } from "@/i18n/types";
 import { Reveal } from "@/components/motion/Reveal";
+import { AboutSectionHeading } from "@/components/about/AboutSectionHeading";
 
 interface HobbiesSectionProps {
   label: string;
@@ -18,10 +19,7 @@ export function HobbiesSection({ label, caption, items }: HobbiesSectionProps) {
 
   return (
     <Reveal className="mt-10 sm:mt-12">
-      <p className="aw-label mb-2 text-[var(--color-text-dim)]">{label}</p>
-      <p className="mb-5 max-w-xl text-sm text-[var(--color-text-secondary)]">
-        {caption}
-      </p>
+      <AboutSectionHeading title={label} caption={caption} className="mb-5" />
 
       <div className="overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/30">
         <div className="flex flex-wrap gap-2 border-b border-[var(--color-border)] p-4 sm:gap-2.5 sm:p-5">

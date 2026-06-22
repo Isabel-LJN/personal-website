@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { MovieItem } from "@/i18n/types";
 import { Reveal } from "@/components/motion/Reveal";
+import { AboutSectionHeading } from "@/components/about/AboutSectionHeading";
 
 interface MovieCarouselProps {
   label: string;
@@ -42,12 +43,7 @@ export function MovieCarousel({ label, caption, items }: MovieCarouselProps) {
   return (
     <Reveal className="mt-10 sm:mt-12">
       <div className="mb-5 flex items-end justify-between gap-4">
-        <div>
-          <p className="aw-label text-[var(--color-text-dim)]">{label}</p>
-          <p className="mt-2 max-w-xl text-sm text-[var(--color-text-secondary)]">
-            {caption}
-          </p>
-        </div>
+        <AboutSectionHeading title={label} caption={caption} />
         <div className="flex shrink-0 gap-2">
           <CarouselButton
             direction="prev"

@@ -357,7 +357,7 @@ export function AboutCosmicScene() {
   return (
     <div
       ref={containerRef}
-      className="about-cosmic-scene relative h-full min-h-[220px] w-full overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/30 sm:min-h-[260px] lg:min-h-[320px]"
+      className="about-cosmic-scene relative aspect-[2.2/1] w-full max-h-[260px] overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/30 sm:max-h-[300px] lg:max-h-[320px]"
       aria-hidden
     >
       <canvas ref={canvasRef} className="block h-full w-full" />

@@ -96,9 +96,14 @@ export interface MovieItem {
   photo: string;
 }
 
+export interface PersonalFact {
+  id: string;
+  label: string;
+  value: string;
+}
+
 export interface PersonalProfile {
-  slogan: string;
-  intro: string;
+  facts: PersonalFact[];
   labels: {
     hobbies: string;
     cities: string;
@@ -192,7 +197,6 @@ export interface Dictionary {
     metaDescription: string;
     subtitle: string;
     title: string;
-    description: string;
     personal: PersonalProfile;
   };
   blog: {

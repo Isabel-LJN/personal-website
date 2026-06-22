@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { TvShowItem } from "@/i18n/types";
 import { Reveal } from "@/components/motion/Reveal";
+import { AboutSectionHeading } from "@/components/about/AboutSectionHeading";
 
 interface TvShowCarouselProps {
   label: string;
@@ -41,7 +42,7 @@ export function TvShowCarousel({ label, items }: TvShowCarouselProps) {
   return (
     <Reveal className="mt-10 sm:mt-12">
       <div className="mb-5 flex items-end justify-between gap-4">
-        <p className="aw-label text-[var(--color-text-dim)]">{label}</p>
+        <AboutSectionHeading title={label} />
         <div className="flex shrink-0 gap-2">
           <CarouselButton
             direction="prev"

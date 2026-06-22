@@ -12,7 +12,7 @@ const zh: Dictionary = {
     email: "15171181332@163.com",
   },
   nav: [
-    { label: "个人介绍", href: "/about" },
+    { label: "我是谁", href: "/about" },
     { label: "写作", href: "/blog" },
   ],
   common: {
@@ -135,15 +135,38 @@ const zh: Dictionary = {
     },
   },
   about: {
-    metaTitle: "个人介绍",
-    metaDescription: "关于 Isabel 自己—— slogan、爱好、影视与去过的城市。",
-    subtitle: "个人介绍",
-    title: "屏幕之外的我",
-    description: "写代码是一面。这里记录我不在仓库里时，仍然愿意花时间的事。",
+    metaTitle: "我是谁",
+    metaDescription: "关于 Isabel — 基本介绍、爱好、影视与去过的城市。",
+    subtitle: "我是谁",
+    title: "我是谁",
     personal: {
-      slogan: "独立开发者 · 把好用的小工具做出来 · 把值得留下的记下来",
-      intro:
-        "白天认真工作；晚上吃美食追剧。下面是我的一些私人偏好——没有 pitch，只是真实的我。",
+      facts: [
+        {
+          id: "name",
+          label: "英文名",
+          value: "Isabel",
+        },
+        {
+          id: "birthday",
+          label: "出生年月日",
+          value: "2004.02.28",
+        },
+        {
+          id: "school",
+          label: "毕业院校",
+          value: "天津科技大学",
+        },
+        {
+          id: "major",
+          label: "专业",
+          value: "计算机科学与技术（信息处理）",
+        },
+        {
+          id: "location",
+          label: "现居地",
+          value: "深圳坂田",
+        },
+      ],
       labels: {
         hobbies: "爱好",
         cities: "去过的城市",

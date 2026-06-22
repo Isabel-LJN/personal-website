@@ -54,9 +54,8 @@ export default async function AboutPage({
       />
 
       <AboutInteractiveHero
-        label={about.subtitle}
         title={about.title}
-        description={about.description}
+        facts={about.personal.facts}
       />
 
       <PersonalSection personal={about.personal} />
