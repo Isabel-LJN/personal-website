@@ -395,7 +395,7 @@ const zh: Dictionary = {
             country: "中国",
             days: 365,
             visitDate: "生活基地",
-            note: "家乡，海河边的日常与相声里的烟火气。",
+            note: "大学，海河边的日常与相声里的烟火气。",
             photo:
               "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&q=80",
             accent: "#d55559",
