@@ -42,7 +42,7 @@ export function Hero({ locale, dict }: HeroProps) {
 
   return (
     <section
-      className="hero-section relative flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center px-5 pb-24 pt-8 text-center sm:min-h-[calc(100vh-4rem)]"
+      className="hero-section relative flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center px-5 pt-8 text-center sm:min-h-[calc(100vh-4rem)]"
     >
       <HeroFluidField />
 

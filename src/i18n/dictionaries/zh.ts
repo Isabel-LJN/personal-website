@@ -44,7 +44,7 @@ const zh: Dictionary = {
       headline: "为写作、搜索",
       headlineAccent: "与工作流做的工具。",
       subline:
-        "我在做 QuickCopy、维护 SEO 知识库、运行 AI 工作流实验——然后把真正有用的部分写下来。",
+        "一名平凡无奇的普通人",
       ctaProjects: "查看精选项目",
       ctaAbout: "个人介绍",
     },
