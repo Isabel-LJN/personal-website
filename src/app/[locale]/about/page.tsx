@@ -56,6 +56,7 @@ export default async function AboutPage({
       <AboutInteractiveHero
         title={about.title}
         facts={about.personal.facts}
+        pronounceLabel={about.personal.pronounceLabel}
       />
 
       <PersonalSection personal={about.personal} />

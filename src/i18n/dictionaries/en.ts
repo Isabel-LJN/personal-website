@@ -143,11 +143,13 @@ const en: Dictionary = {
     subtitle: "Profile",
     title: "Who I am",
     personal: {
+      pronounceLabel: "Hear how to pronounce Isabel",
       facts: [
         {
           id: "name",
           label: "English name",
           value: "Isabel",
+          pronounce: "Isabel",
         },
         {
           id: "birthday",
@@ -168,6 +170,12 @@ const en: Dictionary = {
           id: "location",
           label: "Based in",
           value: "Bantian, Shenzhen",
+        },
+        {
+          id: "email",
+          label: "Email",
+          value: "15171181332@163.com",
+          href: "mailto:15171181332@163.com",
         },
       ],
       labels: {

@@ -33,7 +33,7 @@ export function ParticleTypographyTitleLazy({
     return (
       <h1
         className={cn(
-          "aw-title max-w-[16ch] text-balance",
+          "aw-page-title max-w-2xl text-balance",
           titleClassName,
           className
         )}

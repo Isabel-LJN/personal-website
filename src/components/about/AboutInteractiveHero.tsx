@@ -2,14 +2,20 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { AboutCosmicScene } from "@/components/about/AboutCosmicScene";
+import { PronounceButton } from "@/components/ui/PronounceButton";
 import type { PersonalFact } from "@/i18n/types";
 
 interface AboutInteractiveHeroProps {
   title: string;
   facts: PersonalFact[];
+  pronounceLabel: string;
 }
 
-export function AboutInteractiveHero({ title, facts }: AboutInteractiveHeroProps) {
+export function AboutInteractiveHero({
+  title,
+  facts,
+  pronounceLabel,
+}: AboutInteractiveHeroProps) {
   const reduce = useReducedMotion();
   const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -43,9 +49,26 @@ export function AboutInteractiveHero({ title, facts }: AboutInteractiveHeroProps
               <p className="aw-label mb-1.5 text-[var(--color-text-dim)]">
                 {fact.label}
               </p>
-              <p className="text-sm font-semibold leading-snug text-[var(--color-foreground)] sm:text-[15px]">
-                {fact.value}
-              </p>
+              <div className="flex items-center gap-2">
+                {fact.href ? (
+                  <a
+                    href={fact.href}
+                    className="text-sm font-semibold leading-snug text-[var(--color-foreground)] underline decoration-[var(--color-coral)]/35 underline-offset-2 transition-colors hover:text-[var(--color-coral)] sm:text-[15px]"
+                  >
+                    {fact.value}
+                  </a>
+                ) : (
+                  <p className="text-sm font-semibold leading-snug text-[var(--color-foreground)] sm:text-[15px]">
+                    {fact.value}
+                  </p>
+                )}
+                {fact.pronounce && (
+                  <PronounceButton
+                    text={fact.pronounce}
+                    label={pronounceLabel}
+                  />
+                )}
+              </div>
             </motion.li>
           ))}
         </motion.ul>

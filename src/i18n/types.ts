@@ -100,10 +100,13 @@ export interface PersonalFact {
   id: string;
   label: string;
   value: string;
+  href?: string;
+  pronounce?: string;
 }
 
 export interface PersonalProfile {
   facts: PersonalFact[];
+  pronounceLabel: string;
   labels: {
     hobbies: string;
     cities: string;

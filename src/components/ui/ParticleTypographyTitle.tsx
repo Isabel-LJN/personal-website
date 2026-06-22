@@ -386,7 +386,7 @@ export function ParticleTypographyTitle({
     return (
       <h1
         className={cn(
-          "aw-title max-w-[16ch] text-balance",
+          "aw-page-title max-w-2xl text-balance",
           titleClassName,
           className
         )}
@@ -416,7 +416,7 @@ export function ParticleTypographyTitle({
       <h1
         ref={titleRef}
         className={cn(
-          "particle-typography-title aw-title relative z-10 max-w-[16ch] cursor-default text-balance select-none",
+          "particle-typography-title aw-page-title relative z-10 max-w-2xl cursor-default text-balance select-none",
           titleClassName
         )}
       >

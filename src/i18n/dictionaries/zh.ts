@@ -140,11 +140,13 @@ const zh: Dictionary = {
     subtitle: "我是谁",
     title: "我是:",
     personal: {
+      pronounceLabel: "朗读 Isabel 的发音",
       facts: [
         {
           id: "name",
           label: "英文名",
           value: "Isabel",
+          pronounce: "Isabel",
         },
         {
           id: "birthday",
@@ -165,6 +167,12 @@ const zh: Dictionary = {
           id: "location",
           label: "现居地",
           value: "深圳坂田",
+        },
+        {
+          id: "email",
+          label: "邮箱",
+          value: "15171181332@163.com",
+          href: "mailto:15171181332@163.com",
         },
       ],
       labels: {

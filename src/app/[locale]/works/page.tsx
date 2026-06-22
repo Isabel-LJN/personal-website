@@ -56,7 +56,7 @@ export default async function WorksPage({
         label={dict.works.subtitle}
         title={dict.works.title}
         description={dict.works.description}
-        showDivider={false}
+        accent="ocean"
       />
 
       <section className="pb-20 lg:pb-32">

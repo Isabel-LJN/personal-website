@@ -84,8 +84,7 @@ export default async function BlogPage({
         label={dict.blog.subtitle}
         title={dict.blog.title}
         description={dict.blog.description}
-        showDivider={false}
-        accentLine
+        accent="coral"
         interactiveTitle
         hiddenWords={dict.blog.hiddenWords}
       />
