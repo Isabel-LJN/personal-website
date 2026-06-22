@@ -160,4 +160,45 @@
     @apply hidden items-center gap-2 rounded-full border bg-[var(--color-surface)]/70 px-4 py-2 text-sm text-[var(--color-text-dim)] backdrop-blur-sm md:flex;
     border-color: var(--color-border);
   }
+
+  /* About page — cosmic hero */
+  .about-hero-label {
+    border-color: rgba(213, 85, 89, 0.25);
+    background: rgba(250, 248, 244, 0.55);
+    backdrop-filter: blur(8px);
+    color: var(--color-text-dim);
+  }
+
+  .about-hero-label-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--color-coral);
+    box-shadow: 0 0 0 3px rgba(213, 85, 89, 0.18);
+    animation: about-hero-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes about-hero-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.25);
+      opacity: 0.75;
+    }
+  }
+
+  .about-cosmic-scene {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      0 12px 40px rgba(30, 42, 90, 0.06);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-hero-label-dot {
+      animation: none;
+    }
+  }
 }

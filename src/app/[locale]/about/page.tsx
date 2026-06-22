@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/shared/PageHeader";
+import { AboutInteractiveHero } from "@/components/about/AboutInteractiveHero";
 import { PersonalSection } from "@/components/home/PersonalSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
@@ -53,11 +53,10 @@ export default async function AboutPage({
         ])}
       />
 
-      <PageHeader
+      <AboutInteractiveHero
         label={about.subtitle}
         title={about.title}
         description={about.description}
-        showDivider={false}
       />
 
       <PersonalSection personal={about.personal} />
