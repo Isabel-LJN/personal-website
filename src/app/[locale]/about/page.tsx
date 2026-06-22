@@ -54,6 +54,7 @@ export default async function AboutPage({
       />
 
       <AboutInteractiveHero
+        subtitle={about.subtitle}
         title={about.title}
         facts={about.personal.facts}
         pronounceLabel={about.personal.pronounceLabel}
