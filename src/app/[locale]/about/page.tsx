@@ -58,6 +58,7 @@ export default async function AboutPage({
         title={about.title}
         facts={about.personal.facts}
         pronounceLabel={about.personal.pronounceLabel}
+        pokeHint={about.personal.pokeHint}
       />
 
       <PersonalSection personal={about.personal} />

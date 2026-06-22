@@ -144,6 +144,7 @@ const en: Dictionary = {
     title: "Who I am",
     personal: {
       pronounceLabel: "Hear how to pronounce Isabel",
+      pokeHint: "Poke me",
       facts: [
         {
           id: "name",

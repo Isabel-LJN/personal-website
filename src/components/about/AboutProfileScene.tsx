@@ -3,276 +3,329 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
-
-const COLORS = {
-  coral: "#D55559",
-  accent: "#F1E500",
-  deep: "#1E2A5A",
-  ocean: "#2E6BFF",
-  violet: "#7B5CFF",
-};
-
-function lerp(a: number, b: number, t: number) {
-  return a + (b - a) * t;
-}
-
-interface Pointer {
-  x: number;
-  y: number;
-}
-
-function drawOrbitRing(
-  ctx: CanvasRenderingContext2D,
-  cx: number,
-  cy: number,
-  rx: number,
-  ry: number,
-  rotation: number,
-  color: string,
-  dashed = false
-) {
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(rotation);
-  ctx.beginPath();
-  ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1;
-  if (dashed) ctx.setLineDash([4, 8]);
-  ctx.stroke();
-  ctx.restore();
-}
-
-function drawOrb(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  radius: number,
-  stops: [string, string, string]
-) {
-  const grad = ctx.createRadialGradient(
-    x - radius * 0.3,
-    y - radius * 0.35,
-    radius * 0.1,
-    x,
-    y,
-    radius
-  );
-  grad.addColorStop(0, stops[0]);
-  grad.addColorStop(0.6, stops[1]);
-  grad.addColorStop(1, stops[2]);
-
-  ctx.save();
-  ctx.shadowColor = "rgba(30, 42, 90, 0.18)";
-  ctx.shadowBlur = radius * 0.5;
-  ctx.beginPath();
-  ctx.arc(x, y, radius, 0, Math.PI * 2);
-  ctx.fillStyle = grad;
-  ctx.fill();
-  ctx.restore();
-}
+import { SoftBlobSimulation } from "@/lib/soft-blob-simulation";
 
 interface AboutProfileSceneProps {
   className?: string;
   trackRef?: RefObject<HTMLElement | null>;
+  pokeHint: string;
 }
 
 export function AboutProfileScene({
   className,
   trackRef,
+  pokeHint,
 }: AboutProfileSceneProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
-  const pointerRef = useRef<Pointer>({ x: 0.5, y: 0.5 });
-  const smoothRef = useRef<Pointer>({ x: 0.5, y: 0.5 });
-  const rafRef = useRef(0);
 
   useEffect(() => {
+    const root = rootRef.current;
     const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
+    if (!root || !canvas) return;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    let cancelled = false;
+    let teardown: (() => void) | undefined;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
 
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
-    let time = 0;
+    const boot = async () => {
+      const width = root.clientWidth;
+      const height = root.clientHeight;
+      if (width < 2 || height < 2) {
+        retryTimer = setTimeout(boot, 50);
+        return;
+      }
 
-    const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = container.clientWidth;
-      height = container.clientHeight;
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
+      const THREE = await import("three");
+      if (cancelled) return;
 
-    const trackEl = trackRef?.current ?? container;
+      const trackEl = trackRef?.current ?? root;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    const onPointer = (clientX: number, clientY: number) => {
-      const rect = trackEl.getBoundingClientRect();
-      pointerRef.current = {
-        x: Math.min(1, Math.max(0, (clientX - rect.left) / rect.width)),
-        y: Math.min(1, Math.max(0, (clientY - rect.top) / rect.height)),
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 50);
+      camera.position.set(0, 0.15, 4.2);
+      camera.lookAt(0, 0, 0);
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: true,
+        powerPreference: "high-performance",
+      });
+      renderer.setPixelRatio(dpr);
+      renderer.setSize(width, height, false);
+      renderer.setClearColor(0x000000, 0);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.05;
+
+      const blobGroup = new THREE.Group();
+      scene.add(blobGroup);
+
+      const geometry = new THREE.IcosahedronGeometry(1, 4);
+      const posAttr = geometry.attributes.position;
+      const positions = posAttr.array as Float32Array;
+
+      for (let i = 0; i < posAttr.count; i++) {
+        positions[i * 3] *= 0.94;
+        positions[i * 3 + 1] *= 1.1;
+        positions[i * 3 + 2] *= 0.96;
+      }
+      posAttr.needsUpdate = true;
+      geometry.computeVertexNormals();
+
+      const sim = new SoftBlobSimulation(positions, posAttr.count);
+
+      const blobMat = new THREE.MeshPhysicalMaterial({
+        color: 0xd55559,
+        roughness: 0.38,
+        metalness: 0.04,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.22,
+        sheen: 0.35,
+        sheenRoughness: 0.6,
+        sheenColor: new THREE.Color(0xf1e500),
+      });
+
+      const blob = new THREE.Mesh(geometry, blobMat);
+      blobGroup.add(blob);
+
+      const eyeMat = new THREE.MeshStandardMaterial({
+        color: 0x1a1a1a,
+        roughness: 0.35,
+        metalness: 0,
+      });
+      const eyeWhiteMat = new THREE.MeshStandardMaterial({
+        color: 0xfaf8f4,
+        roughness: 0.4,
+        metalness: 0,
+      });
+
+      const leftEye = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 16), eyeMat);
+      leftEye.position.set(-0.28, 0.18, 0.82);
+      blobGroup.add(leftEye);
+
+      const rightEye = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 16), eyeMat);
+      rightEye.position.set(0.28, 0.18, 0.82);
+      blobGroup.add(rightEye);
+
+      const leftShine = new THREE.Mesh(
+        new THREE.SphereGeometry(0.035, 8, 8),
+        eyeWhiteMat
+      );
+      leftShine.position.set(-0.25, 0.22, 0.9);
+      blobGroup.add(leftShine);
+
+      const rightShine = new THREE.Mesh(
+        new THREE.SphereGeometry(0.035, 8, 8),
+        eyeWhiteMat
+      );
+      rightShine.position.set(0.31, 0.22, 0.9);
+      blobGroup.add(rightShine);
+
+      const blushMat = new THREE.MeshStandardMaterial({
+        color: 0xf1e500,
+        roughness: 0.85,
+        metalness: 0,
+        transparent: true,
+        opacity: 0.35,
+      });
+      const leftBlush = new THREE.Mesh(
+        new THREE.SphereGeometry(0.14, 12, 12),
+        blushMat
+      );
+      leftBlush.position.set(-0.52, -0.02, 0.72);
+      leftBlush.scale.set(1.2, 0.7, 0.5);
+      blobGroup.add(leftBlush);
+
+      const rightBlush = leftBlush.clone();
+      rightBlush.position.set(0.52, -0.02, 0.72);
+      blobGroup.add(rightBlush);
+
+      scene.add(new THREE.AmbientLight(0xfff5e8, 0.95));
+      const keyLight = new THREE.DirectionalLight(0xffffff, 1.35);
+      keyLight.position.set(2.5, 3, 4);
+      scene.add(keyLight);
+      const fillLight = new THREE.DirectionalLight(0xf1e500, 0.45);
+      fillLight.position.set(-3, 0.5, 2);
+      scene.add(fillLight);
+      const rimLight = new THREE.DirectionalLight(0xffb4b6, 0.55);
+      rimLight.position.set(0, -2, -3);
+      scene.add(rimLight);
+
+      const raycaster = new THREE.Raycaster();
+      const pointerNdc = new THREE.Vector2();
+      const pointerWorld = new THREE.Vector3();
+      const trackNorm = { x: 0.5, y: 0.5 };
+      let pointerDown = false;
+      let hoverCanvas = false;
+      let raf = 0;
+      let time = 0;
+
+      const setPointerFromClient = (clientX: number, clientY: number) => {
+        const rect = canvas.getBoundingClientRect();
+        pointerNdc.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        pointerNdc.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+      };
+
+      const setTrackFromClient = (clientX: number, clientY: number) => {
+        const rect = trackEl.getBoundingClientRect();
+        trackNorm.x = Math.min(
+          1,
+          Math.max(0, (clientX - rect.left) / rect.width)
+        );
+        trackNorm.y = Math.min(
+          1,
+          Math.max(0, (clientY - rect.top) / rect.height)
+        );
+      };
+
+      const pushAtPointer = (strength: number, radius: number) => {
+        raycaster.setFromCamera(pointerNdc, camera);
+        const hits = raycaster.intersectObject(blob, false);
+        if (hits.length > 0) {
+          pointerWorld.copy(hits[0].point);
+          blob.worldToLocal(pointerWorld);
+          sim.applyPointer(
+            pointerWorld.x,
+            pointerWorld.y,
+            pointerWorld.z,
+            radius,
+            strength
+          );
+        }
+      };
+
+      const onPointerMove = (e: PointerEvent) => {
+        setTrackFromClient(e.clientX, e.clientY);
+        if (!hoverCanvas && e.target !== canvas) return;
+        setPointerFromClient(e.clientX, e.clientY);
+        pushAtPointer(pointerDown ? 0.55 : 0.22, pointerDown ? 0.55 : 0.48);
+      };
+
+      const onCanvasEnter = () => {
+        hoverCanvas = true;
+      };
+      const onCanvasLeave = () => {
+        hoverCanvas = false;
+        pointerDown = false;
+      };
+      const onCanvasDown = (e: PointerEvent) => {
+        pointerDown = true;
+        setPointerFromClient(e.clientX, e.clientY);
+        pushAtPointer(0.75, 0.5);
+      };
+      const onCanvasUp = () => {
+        pointerDown = false;
+      };
+
+      const onTrackMove = (e: MouseEvent) => {
+        setTrackFromClient(e.clientX, e.clientY);
+      };
+
+      const loop = (now: number) => {
+        time = now * 0.001;
+        const breathe = reduce ? 0 : Math.sin(time * 1.6) * 0.015;
+
+        if (!reduce) {
+          const tiltX = (trackNorm.x - 0.5) * 2;
+          const tiltY = (trackNorm.y - 0.5) * 2;
+          sim.applyDirectionalTilt(tiltX, -tiltY, hoverCanvas ? 0.35 : 0.85);
+
+          blobGroup.rotation.y = THREE.MathUtils.lerp(
+            blobGroup.rotation.y,
+            tiltX * 0.22,
+            0.06
+          );
+          blobGroup.rotation.x = THREE.MathUtils.lerp(
+            blobGroup.rotation.x,
+            tiltY * 0.14,
+            0.06
+          );
+        }
+
+        sim.step(reduce ? 0.16 : 0.1, reduce ? 0.78 : 0.84, 0.45, breathe);
+        posAttr.needsUpdate = true;
+        geometry.computeVertexNormals();
+
+        if (!reduce) {
+          blobGroup.position.y = Math.sin(time * 1.4) * 0.04;
+        }
+
+        renderer.render(scene, camera);
+        raf = requestAnimationFrame(loop);
+      };
+
+      raf = requestAnimationFrame(loop);
+
+      const resize = () => {
+        const w = root.clientWidth;
+        const h = root.clientHeight;
+        if (w < 2 || h < 2) return;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h, false);
+      };
+
+      const ro = new ResizeObserver(resize);
+      ro.observe(root);
+
+      canvas.addEventListener("pointerenter", onCanvasEnter);
+      canvas.addEventListener("pointerleave", onCanvasLeave);
+      canvas.addEventListener("pointerdown", onCanvasDown);
+      canvas.addEventListener("pointerup", onCanvasUp);
+      canvas.addEventListener("pointercancel", onCanvasUp);
+      canvas.addEventListener("pointermove", onPointerMove);
+      trackEl.addEventListener("mousemove", onTrackMove);
+
+      teardown = () => {
+        cancelAnimationFrame(raf);
+        ro.disconnect();
+        canvas.removeEventListener("pointerenter", onCanvasEnter);
+        canvas.removeEventListener("pointerleave", onCanvasLeave);
+        canvas.removeEventListener("pointerdown", onCanvasDown);
+        canvas.removeEventListener("pointerup", onCanvasUp);
+        canvas.removeEventListener("pointercancel", onCanvasUp);
+        canvas.removeEventListener("pointermove", onPointerMove);
+        trackEl.removeEventListener("mousemove", onTrackMove);
+        geometry.dispose();
+        blobMat.dispose();
+        eyeMat.dispose();
+        eyeWhiteMat.dispose();
+        blushMat.dispose();
+        leftEye.geometry.dispose();
+        rightEye.geometry.dispose();
+        leftShine.geometry.dispose();
+        rightShine.geometry.dispose();
+        leftBlush.geometry.dispose();
+        renderer.dispose();
       };
     };
 
-    const draw = () => {
-      time += reduce ? 0.003 : 0.01;
-      smoothRef.current.x = lerp(
-        smoothRef.current.x,
-        pointerRef.current.x,
-        reduce ? 1 : 0.06
-      );
-      smoothRef.current.y = lerp(
-        smoothRef.current.y,
-        pointerRef.current.y,
-        reduce ? 1 : 0.06
-      );
-
-      const mx = smoothRef.current.x;
-      const my = smoothRef.current.y;
-      const dx = (mx - 0.5) * 2;
-      const dy = (my - 0.5) * 2;
-
-      ctx.clearRect(0, 0, width, height);
-
-      const bg = ctx.createLinearGradient(0, 0, 0, height);
-      bg.addColorStop(0, "rgba(250, 248, 244, 0.95)");
-      bg.addColorStop(0.55, "rgba(240, 236, 228, 0.7)");
-      bg.addColorStop(1, "rgba(232, 228, 220, 0.85)");
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, width, height);
-
-      const glowX = width * mx;
-      const glowY = height * my;
-      const glow = ctx.createRadialGradient(
-        glowX,
-        glowY,
-        0,
-        glowX,
-        glowY,
-        Math.max(width, height) * 0.55
-      );
-      glow.addColorStop(0, "rgba(241, 229, 0, 0.14)");
-      glow.addColorStop(0.45, "rgba(213, 85, 89, 0.07)");
-      glow.addColorStop(1, "rgba(250, 248, 244, 0)");
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, width, height);
-
-      for (let i = 0; i < 20; i++) {
-        const px =
-          ((width * 0.41 * (i + 1) * 73) % width) + dx * (8 + (i % 4) * 3);
-        const py =
-          ((height * 0.55 * (i + 1) * 47) % height) + dy * (6 + (i % 3) * 2);
-        ctx.beginPath();
-        ctx.arc(px, py, (i % 3) * 0.4 + 0.5, 0, Math.PI * 2);
-        ctx.fillStyle =
-          i % 5 === 0 ? "rgba(241, 229, 0, 0.35)" : "rgba(30, 42, 90, 0.12)";
-        ctx.fill();
-      }
-
-      const cx = width * (0.5 + dx * 0.1);
-      const cy = height * (0.46 + dy * 0.08);
-      const orbitTilt = 0.72 + dy * 0.12;
-      const orbitSpin = time * 0.3 + dx * 0.6;
-      const base = Math.min(width, height);
-
-      drawOrbitRing(
-        ctx,
-        cx,
-        cy,
-        base * 0.38,
-        base * 0.14 * orbitTilt,
-        orbitSpin,
-        "rgba(46, 107, 255, 0.28)"
-      );
-      drawOrbitRing(
-        ctx,
-        cx,
-        cy,
-        base * 0.28,
-        base * 0.1 * orbitTilt,
-        -orbitSpin * 0.65 + 0.5,
-        "rgba(213, 85, 89, 0.32)",
-        true
-      );
-
-      const mainR = base * 0.16;
-      drawOrb(ctx, cx, cy, mainR, ["#FFD56B", COLORS.coral, "#8E2E45"]);
-
-      const satellites = [
-        {
-          angle: time * 0.95 + dx * 1.1,
-          dist: base * 0.32,
-          ry: base * 0.12 * orbitTilt,
-          r: mainR * 0.24,
-          colors: [COLORS.accent, COLORS.ocean, COLORS.deep] as [
-            string,
-            string,
-            string,
-          ],
-        },
-        {
-          angle: -time * 0.75 + Math.PI + dy * 0.8,
-          dist: base * 0.22,
-          ry: base * 0.09 * orbitTilt,
-          r: mainR * 0.15,
-          colors: [COLORS.violet, "#4A3AFF", COLORS.deep] as [
-            string,
-            string,
-            string,
-          ],
-        },
-      ];
-
-      for (const sat of satellites) {
-        const sx = cx + Math.cos(sat.angle) * sat.dist;
-        const sy = cy + Math.sin(sat.angle) * sat.ry;
-        drawOrb(ctx, sx, sy, sat.r, sat.colors);
-      }
-
-      rafRef.current = requestAnimationFrame(draw);
-    };
-
-    resize();
-    draw();
-
-    const ro = new ResizeObserver(resize);
-    ro.observe(container);
-
-    const onMouseMove = (e: MouseEvent) => onPointer(e.clientX, e.clientY);
-    const onTouchMove = (e: TouchEvent) => {
-      const t = e.touches[0];
-      if (t) onPointer(t.clientX, t.clientY);
-    };
-
-    trackEl.addEventListener("mousemove", onMouseMove);
-    trackEl.addEventListener("touchmove", onTouchMove, { passive: true });
+    boot();
 
     return () => {
-      cancelAnimationFrame(rafRef.current);
-      ro.disconnect();
-      trackEl.removeEventListener("mousemove", onMouseMove);
-      trackEl.removeEventListener("touchmove", onTouchMove);
+      cancelled = true;
+      if (retryTimer) clearTimeout(retryTimer);
+      teardown?.();
     };
   }, [reduce, trackRef]);
 
   return (
     <div
-      ref={containerRef}
+      ref={rootRef}
       className={cn(
-        "about-profile-scene relative min-h-[280px] overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/30",
+        "about-profile-scene relative min-h-[280px] cursor-grab overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/30 active:cursor-grabbing",
         className
       )}
       aria-hidden
     >
-      <canvas ref={canvasRef} className="block h-full w-full" />
+      <canvas ref={canvasRef} className="block h-full w-full touch-none" />
+      <p className="pointer-events-none absolute inset-x-0 bottom-3 text-center text-[10px] font-medium tracking-wide text-[var(--color-text-dim)]/80">
+        {pokeHint}
+      </p>
     </div>
   );
 }

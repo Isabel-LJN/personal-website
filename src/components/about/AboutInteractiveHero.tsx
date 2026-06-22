@@ -11,6 +11,7 @@ interface AboutInteractiveHeroProps {
   title: string;
   facts: PersonalFact[];
   pronounceLabel: string;
+  pokeHint: string;
 }
 
 export function AboutInteractiveHero({
@@ -18,6 +19,7 @@ export function AboutInteractiveHero({
   title,
   facts,
   pronounceLabel,
+  pokeHint,
 }: AboutInteractiveHeroProps) {
   const reduce = useReducedMotion();
   const ease = [0.22, 1, 0.36, 1] as const;
@@ -103,7 +105,11 @@ export function AboutInteractiveHero({
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.65, delay: 0.18, ease }}
           >
-            <AboutProfileScene trackRef={trackRef} className="h-full" />
+            <AboutProfileScene
+              trackRef={trackRef}
+              pokeHint={pokeHint}
+              className="h-full"
+            />
           </motion.div>
         </div>
       </div>

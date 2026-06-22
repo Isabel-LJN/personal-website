@@ -141,6 +141,7 @@ const zh: Dictionary = {
     title: "关于我",
     personal: {
       pronounceLabel: "朗读 Isabel 的发音",
+      pokeHint: "戳戳我",
       facts: [
         {
           id: "name",

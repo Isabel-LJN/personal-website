@@ -107,6 +107,7 @@ export interface PersonalFact {
 export interface PersonalProfile {
   facts: PersonalFact[];
   pronounceLabel: string;
+  pokeHint: string;
   labels: {
     hobbies: string;
     cities: string;
