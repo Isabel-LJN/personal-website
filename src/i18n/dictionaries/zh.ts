@@ -138,7 +138,7 @@ const zh: Dictionary = {
     metaTitle: "我是谁",
     metaDescription: "关于 Isabel — 基本介绍、爱好、影视与去过的城市。",
     subtitle: "我是谁",
-    title: "我是谁",
+    title: "我是:",
     personal: {
       facts: [
         {
