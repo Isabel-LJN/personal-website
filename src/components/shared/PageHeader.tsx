@@ -7,6 +7,7 @@ interface PageHeaderProps {
   description?: string;
   className?: string;
   showDivider?: boolean;
+  accentLine?: boolean;
   interactiveTitle?: boolean;
   hiddenWords?: string[];
 }
@@ -17,6 +18,7 @@ export function PageHeader({
   description,
   className,
   showDivider = true,
+  accentLine = false,
   interactiveTitle = false,
   hiddenWords,
 }: PageHeaderProps) {
@@ -37,6 +39,12 @@ export function PageHeader({
           />
         ) : (
           <h1 className="aw-title max-w-[16ch] text-balance">{title}</h1>
+        )}
+        {accentLine && (
+          <div
+            className="mt-5 h-[2px] w-12 bg-[var(--color-accent)]"
+            aria-hidden
+          />
         )}
         {description && (
           <p className="aw-body mt-8 max-w-xl text-balance">{description}</p>

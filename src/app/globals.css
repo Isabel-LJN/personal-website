@@ -161,6 +161,45 @@
     border-color: var(--color-border);
   }
 
+  /* Writing / blog */
+  .writing-filter-sticky {
+    position: sticky;
+    top: 3.5rem;
+    z-index: 20;
+    margin-inline: -1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-background) 88%, transparent);
+    padding: 1rem 1.25rem;
+    backdrop-filter: blur(10px);
+  }
+
+  @media (min-width: 640px) {
+    .writing-filter-sticky {
+      margin-inline: -2rem;
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .writing-filter-sticky {
+      top: 4rem;
+      margin-inline: -2.5rem;
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .writing-filter-bar {
+    @apply flex flex-col gap-4;
+  }
+
+  .writing-article-cover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+  }
+
+  .writing-article-body :is(h2, h3, h4) + p {
+    margin-top: 0.25rem;
+  }
+
   /* About page — cosmic hero */
   .about-hero-label {
     border-color: rgba(213, 85, 89, 0.25);

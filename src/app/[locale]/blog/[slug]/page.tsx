@@ -95,13 +95,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       />
 
       <article>
-        <header className="pt-10 pb-10 sm:pt-12 lg:pt-14">
+        <header className="writing-article-header pt-10 pb-8 sm:pt-12 sm:pb-10 lg:pt-14">
           <div className="editorial-container">
             <Link
               href={backHref}
-              className="mb-8 inline-flex text-sm text-[var(--color-text-dim)] transition-colors hover:text-black"
+              className="writing-back-link mb-8 inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)]/50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-dim)] transition-colors hover:border-[var(--color-foreground)]/15 hover:text-[var(--color-foreground)]"
             >
-              ← {dict.blog.backToBlog}
+              <span aria-hidden>←</span>
+              {dict.blog.backToBlog}
             </Link>
 
             <div className="mb-6 flex flex-wrap items-center gap-3">
@@ -109,19 +110,26 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <span className="text-sm text-[var(--color-text-dim)]">
                 {post.readTime} {dict.common.minRead}
               </span>
-              <time dateTime={post.publishedAt.toString()} className="text-sm text-[var(--color-text-dim)]">
+              <time
+                dateTime={post.publishedAt.toString()}
+                className="text-sm text-[var(--color-text-dim)]"
+              >
                 {formatDate(post.publishedAt, localeParam)}
               </time>
             </div>
 
             <h1 className="headline-lg max-w-4xl text-balance">{post.title}</h1>
+            <div
+              className="mt-5 h-[2px] w-12 bg-[var(--color-accent)]"
+              aria-hidden
+            />
             <p className="body-lg mt-6 max-w-2xl">{post.excerpt}</p>
           </div>
         </header>
 
         {post.coverImage && (
           <div className="editorial-container">
-            <div className="relative aspect-[2/1] overflow-hidden rounded-xl border border-[var(--color-border)]">
+            <div className="writing-article-cover relative aspect-[2/1] overflow-hidden rounded-2xl border border-[var(--color-border)]">
               <Image
                 src={post.coverImage}
                 alt={post.title}
@@ -135,15 +143,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         )}
 
         <div className="editorial-container py-14 lg:py-20">
-          <div className="max-w-2xl">
+          <div className="writing-article-body mx-auto max-w-2xl">
             <MarkdownContent content={post.content} />
-            <div className="mt-12 flex flex-wrap gap-2 border-t border-[var(--color-border)] pt-8">
-              {post.tags.map((tag) => (
-                <Badge key={tag} variant="outline">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
+            {post.tags.length > 0 && (
+              <div className="mt-12 flex flex-wrap gap-2 border-t border-[var(--color-border)] pt-8">
+                {post.tags.map((tag) => (
+                  <Badge key={tag} variant="outline">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </article>

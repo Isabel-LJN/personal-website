@@ -210,7 +210,7 @@ const zh: Dictionary = {
     metaDescription: "关于计算机、SEO 与产品方向的笔记与长文。",
     subtitle: "写作",
     title: "笔记与文章",
-    description: "三个写作方向——系统、搜索、产品——在下方切换浏览。",
+    description: "想到什么写什么",
     backToBlog: "返回写作",
     filterLabel: "分类",
     categories: [

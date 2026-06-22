@@ -85,28 +85,32 @@ export default async function BlogPage({
         title={dict.blog.title}
         description={dict.blog.description}
         showDivider={false}
+        accentLine
         interactiveTitle
         hiddenWords={dict.blog.hiddenWords}
       />
 
       <section className="pb-20 lg:pb-32">
         <div className="editorial-container">
-          <Suspense fallback={<div className="mb-10 h-11" />}>
-            <WritingCategoryNav
-              categories={dict.blog.categories}
-              filterLabel={dict.blog.filterLabel}
-              className="mb-10 lg:mb-14"
-            />
-          </Suspense>
+          <div className="writing-filter-sticky">
+            <Suspense fallback={<div className="h-14" />}>
+              <WritingCategoryNav
+                categories={dict.blog.categories}
+                filterLabel={dict.blog.filterLabel}
+              />
+            </Suspense>
+          </div>
 
-          <Suspense fallback={null}>
-            <BlogPostGrid
-              posts={posts}
-              locale={localeParam}
-              dict={dict}
-              emptyLabel={dict.blog.empty}
-            />
-          </Suspense>
+          <div className="mt-10 lg:mt-14">
+            <Suspense fallback={null}>
+              <BlogPostGrid
+                posts={posts}
+                locale={localeParam}
+                dict={dict}
+                emptyLabel={dict.blog.empty}
+              />
+            </Suspense>
+          </div>
         </div>
       </section>
     </>

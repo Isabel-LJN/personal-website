@@ -33,41 +33,52 @@ export function WritingCategoryNav({
 
   return (
     <nav
-      className={cn("flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-3", className)}
+      className={cn("writing-filter-bar", className)}
       aria-label={filterLabel}
     >
-      <span className="aw-label shrink-0 text-[var(--color-text-dim)]">
-        {filterLabel}
-      </span>
-      <div className="flex flex-wrap gap-2">
-        {categories.map((cat) => {
-          const isActive = active === cat.slug;
-          const href = `${localizedPath(locale, "/blog")}?category=${cat.slug}`;
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <span className="aw-label shrink-0 text-[var(--color-text-dim)]">
+            {filterLabel}
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => {
+              const isActive = active === cat.slug;
+              const href = `${localizedPath(locale, "/blog")}?category=${cat.slug}`;
 
-          return (
-            <Link
-              key={cat.slug}
-              href={href}
-              scroll={false}
-              aria-current={isActive ? "page" : undefined}
-              className={cn(
-                "relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200",
-                isActive
-                  ? "bg-[var(--color-foreground)] text-[var(--color-background)]"
-                  : "bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:bg-[var(--color-foreground)]/8 hover:text-[var(--color-foreground)]"
-              )}
-            >
-              {cat.label}
-              {isActive && !reduce && (
-                <motion.span
-                  layoutId="writing-category-pill"
-                  className="absolute inset-0 -z-10 rounded-full bg-[var(--color-foreground)]"
-                  transition={{ type: "spring", stiffness: 400, damping: 34 }}
-                />
-              )}
-            </Link>
-          );
-        })}
+              return (
+                <Link
+                  key={cat.slug}
+                  href={href}
+                  scroll={false}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "relative rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors duration-200",
+                    isActive
+                      ? "text-[var(--color-foreground)]"
+                      : "text-[var(--color-text-dim)] hover:text-[var(--color-text-secondary)]"
+                  )}
+                >
+                  {isActive && !reduce && (
+                    <motion.span
+                      layoutId="writing-category-pill"
+                      className="absolute inset-0 -z-10 rounded-full bg-[var(--color-accent)]"
+                      transition={{
+                        type: "spring",
+                        stiffness: 420,
+                        damping: 34,
+                      }}
+                    />
+                  )}
+                  {isActive && reduce && (
+                    <span className="absolute inset-0 -z-10 rounded-full bg-[var(--color-accent)]" />
+                  )}
+                  {cat.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </nav>
   );
