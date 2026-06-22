@@ -207,7 +207,7 @@ const zh: Dictionary = {
   },
   blog: {
     metaTitle: "写作",
-    metaDescription: "关于计算机、SEO 与产品经理方向的笔记与长文。",
+    metaDescription: "关于计算机、SEO 与产品方向的笔记与长文。",
     subtitle: "写作",
     title: "笔记与文章",
     description: "三个写作方向——系统、搜索、产品——在下方切换浏览。",
@@ -216,9 +216,10 @@ const zh: Dictionary = {
     categories: [
       { slug: "cs", label: "计算机" },
       { slug: "seo", label: "SEO" },
-      { slug: "product", label: "产品经理" },
+      { slug: "product", label: "产品" },
     ],
     empty: "这个分类下还没有文章。",
+    hiddenWords: ["系统", "搜索", "产品", "笔记"],
   },
   works: {
     metaTitle: "作品",

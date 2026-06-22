@@ -33,6 +33,7 @@ function localizeBlogPosts(posts: BlogPost[], locale?: Locale): BlogPost[] {
 }
 
 async function isDbAvailable(): Promise<boolean> {
+  if (!process.env.DATABASE_URL) return false;
   try {
     await prisma.$queryRaw`SELECT 1`;
     return true;

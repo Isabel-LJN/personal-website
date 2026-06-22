@@ -229,6 +229,7 @@ const en: Dictionary = {
       { slug: "product", label: "Product" },
     ],
     empty: "Nothing published in this lane yet.",
+    hiddenWords: ["Systems", "Search", "Product", "Notes"],
   },
   works: {
     metaTitle: "Work",

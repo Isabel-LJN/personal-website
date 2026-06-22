@@ -136,6 +136,7 @@ export interface Dictionary {
     filterLabel: string;
     categories: { slug: "cs" | "seo" | "product"; label: string }[];
     empty: string;
+    hiddenWords: string[];
   };
   works: {
     metaTitle: string;

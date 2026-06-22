@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { ParticleTypographyTitleLazy } from "@/components/ui/ParticleTypographyTitleLazy";
 
 interface PageHeaderProps {
   title: string;
@@ -6,6 +7,8 @@ interface PageHeaderProps {
   description?: string;
   className?: string;
   showDivider?: boolean;
+  interactiveTitle?: boolean;
+  hiddenWords?: string[];
 }
 
 export function PageHeader({
@@ -14,6 +17,8 @@ export function PageHeader({
   description,
   className,
   showDivider = true,
+  interactiveTitle = false,
+  hiddenWords,
 }: PageHeaderProps) {
   return (
     <section
@@ -25,7 +30,14 @@ export function PageHeader({
     >
       <div className="editorial-container">
         {label && <p className="aw-label mb-6">{label}</p>}
-        <h1 className="aw-title max-w-[16ch] text-balance">{title}</h1>
+        {interactiveTitle ? (
+          <ParticleTypographyTitleLazy
+            title={title}
+            hiddenWords={hiddenWords}
+          />
+        ) : (
+          <h1 className="aw-title max-w-[16ch] text-balance">{title}</h1>
+        )}
         {description && (
           <p className="aw-body mt-8 max-w-xl text-balance">{description}</p>
         )}

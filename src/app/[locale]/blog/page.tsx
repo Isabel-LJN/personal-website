@@ -85,6 +85,8 @@ export default async function BlogPage({
         title={dict.blog.title}
         description={dict.blog.description}
         showDivider={false}
+        interactiveTitle
+        hiddenWords={dict.blog.hiddenWords}
       />
 
       <section className="pb-20 lg:pb-32">
