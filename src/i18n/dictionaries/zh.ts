@@ -173,7 +173,7 @@ const zh: Dictionary = {
         {
           id: "location",
           label: "现居地",
-          value: "深圳坂田",
+          value: "深圳龙岗区坂田街道",
         },
         {
           id: "email",
