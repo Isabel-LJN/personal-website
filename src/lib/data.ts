@@ -32,12 +32,32 @@ function localizeBlogPosts(posts: BlogPost[], locale?: Locale): BlogPost[] {
   return posts.map((post) => localizeBlogPost(post, locale));
 }
 
+let dbAvailabilityCache: { value: boolean; checkedAt: number } | null = null;
+const DB_CHECK_TTL_MS = 60_000;
+const DB_CHECK_TIMEOUT_MS = 750;
+
 async function isDbAvailable(): Promise<boolean> {
   if (!process.env.DATABASE_URL) return false;
+
+  const now = Date.now();
+  if (
+    dbAvailabilityCache &&
+    now - dbAvailabilityCache.checkedAt < DB_CHECK_TTL_MS
+  ) {
+    return dbAvailabilityCache.value;
+  }
+
   try {
-    await prisma.$queryRaw`SELECT 1`;
+    await Promise.race([
+      prisma.$queryRaw`SELECT 1`,
+      new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error("db-timeout")), DB_CHECK_TIMEOUT_MS);
+      }),
+    ]);
+    dbAvailabilityCache = { value: true, checkedAt: now };
     return true;
   } catch {
+    dbAvailabilityCache = { value: false, checkedAt: now };
     return false;
   }
 }

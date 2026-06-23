@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { localizedPath, stripLocale } from "@/i18n/config";
@@ -17,6 +18,7 @@ function isActive(path: string, href: string): boolean {
 
 export function BottomDock() {
   const pathname = usePathname();
+  const router = useRouter();
   const { locale, dict } = useLocale();
   const { path } = stripLocale(pathname);
   const reduce = useReducedMotion();
@@ -25,6 +27,17 @@ export function BottomDock() {
     ...dict.nav,
     { label: dict.common.work, href: "/works" as const },
   ];
+
+  useEffect(() => {
+    const routes = [
+      localizedPath(locale, "/"),
+      localizedPath(locale, "/about"),
+      `${localizedPath(locale, "/blog")}?category=cs`,
+      localizedPath(locale, "/works"),
+      localizedPath(locale, "/contact"),
+    ];
+    routes.forEach((href) => router.prefetch(href));
+  }, [locale, router]);
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-center px-4 sm:bottom-6">
@@ -37,6 +50,7 @@ export function BottomDock() {
       >
         <Link
           href={localizedPath(locale, "/")}
+          prefetch
           className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-white/10 transition-colors hover:bg-white/20 sm:h-11 sm:w-11"
           aria-label={dict.meta.siteName}
         >
@@ -63,8 +77,9 @@ export function BottomDock() {
               <Link
                 key={item.href}
                 href={href}
+                prefetch
                 className={cn(
-                  "relative whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-medium uppercase tracking-wider transition-colors sm:px-4 sm:text-xs",
+                  "relative whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-medium uppercase tracking-wider transition-opacity duration-150 sm:px-4 sm:text-xs",
                   active
                     ? "text-white"
                     : "text-[var(--color-dock-muted)] hover:text-white/90"
@@ -85,6 +100,7 @@ export function BottomDock() {
 
         <Link
           href={localizedPath(locale, "/contact")}
+          prefetch
           className="ml-1 shrink-0 rounded-full bg-[var(--color-accent)] px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-black transition-colors hover:bg-[var(--color-accent-hover)] sm:px-5 sm:text-xs"
         >
           {dict.common.dockCta}

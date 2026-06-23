@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { HtmlLang } from "@/components/layout/HtmlLang";
 import { IntroSplash } from "@/components/layout/IntroSplash";
 import { BottomDock } from "@/components/layout/BottomDock";
@@ -7,6 +8,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { LocaleProvider } from "@/i18n/locale-context";
+import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import { isValidLocale, locales, type LocaleParams } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import {
@@ -64,6 +66,9 @@ export default async function LocaleLayout({
         ]}
       />
       <LocaleProvider locale={localeParam} dict={dict}>
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         <IntroSplash />
         <Header />
         <main>{children}</main>

@@ -256,8 +256,8 @@ const zh: Dictionary = {
         {
           id: "meteor-garden",
           title: "流星花园",
-          subtitle: "Meteor Garden",
-          tags: "青春 · 偶像 · 回忆",
+          subtitle: "沈月 · 王鹤棣 · 杉菜与道明寺",
+          tags: "青春 · 偶像 · 2018版",
           accent: "#d55559",
           accentEnd: "#7a3537",
           photo: "/posters/meteor-garden.jpg",
@@ -283,7 +283,7 @@ const zh: Dictionary = {
         {
           id: "the-story-of-minglan",
           title: "知否知否",
-          subtitle: "The Story of Minglan",
+          subtitle: "赵丽颖主演 · 盛明兰",
           tags: "宅斗 · 宋代 · 细节",
           accent: "#6b8f71",
           accentEnd: "#3d5240",

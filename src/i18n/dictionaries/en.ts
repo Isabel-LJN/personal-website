@@ -260,8 +260,8 @@ const en: Dictionary = {
         {
           id: "meteor-garden",
           title: "Meteor Garden",
-          subtitle: "流星花园",
-          tags: "Youth · Romance · Memories",
+          subtitle: "Shen Yue · Dylan Wang · Shan Cai & Dao Ming Si",
+          tags: "Youth · Romance · 2018",
           accent: "#d55559",
           accentEnd: "#7a3537",
           photo: "/posters/meteor-garden.jpg",
@@ -287,7 +287,7 @@ const en: Dictionary = {
         {
           id: "the-story-of-minglan",
           title: "The Story of Minglan",
-          subtitle: "知否知否",
+          subtitle: "Starring Zhao Liying · Minglan",
           tags: "Period · Family · Detail-rich",
           accent: "#6b8f71",
           accentEnd: "#3d5240",

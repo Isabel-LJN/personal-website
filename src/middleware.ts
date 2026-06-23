@@ -14,6 +14,10 @@ export function middleware(request: NextRequest) {
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
+    pathname === "/icon" ||
+    pathname.startsWith("/icon.") ||
+    pathname === "/apple-icon" ||
+    pathname.startsWith("/apple-icon.") ||
     pathname.includes(".")
   ) {
     return NextResponse.next();
@@ -31,5 +35,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|favicon.svg|icon|apple-icon).*)",
+  ],
 };
