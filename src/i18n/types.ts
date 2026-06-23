@@ -149,6 +149,12 @@ export interface Dictionary {
     work: string;
     dockCta: string;
     searchPlaceholder: string;
+    searchEmpty: string;
+    searchNoResults: string;
+    searchLoading: string;
+    searchHint: string;
+    searchBlog: string;
+    searchWork: string;
     scrollToTop: string;
   };
   intro: {

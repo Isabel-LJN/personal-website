@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { localizedPath } from "@/i18n/config";
 import { useLocale } from "@/i18n/locale-context";
 import { LanguageSwitch } from "./LanguageSwitch";
+import { SiteSearch } from "./SiteSearch";
 
 export function Header() {
   const { locale, dict } = useLocale();
@@ -32,10 +33,7 @@ export function Header() {
           </span>
         </Link>
 
-        <div className="aw-search min-w-0 flex-1 max-w-md">
-          <span className="text-base opacity-40">⌕</span>
-          <span className="truncate">{dict.common.searchPlaceholder}</span>
-        </div>
+        <SiteSearch className="min-w-0 flex-1 max-w-md" />
 
         <div className="flex shrink-0 items-center gap-3 sm:gap-4">
           <Suspense fallback={null}>
