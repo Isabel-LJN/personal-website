@@ -21,10 +21,10 @@ export function BlogCard({ post, locale, dict }: BlogCardProps) {
   return (
     <Link
       href={localizedPath(locale, `/blog/${post.slug}`)}
-      className="group block rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 p-5 transition-all duration-300 hover:border-[var(--color-foreground)]/15 hover:bg-[var(--color-surface)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] sm:p-6"
+      className="group block h-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/45 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--color-foreground)]/12 hover:bg-[var(--color-surface)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.07)] sm:p-6"
     >
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className="rounded-full bg-[var(--color-accent)]/30 px-2.5 py-0.5 text-[11px] font-semibold text-[var(--color-foreground)]">
+        <span className="rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/25 px-2.5 py-0.5 text-[11px] font-semibold text-[var(--color-foreground)]">
           {categoryLabel}
         </span>
         <span className="text-xs text-[var(--color-text-dim)]">

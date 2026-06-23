@@ -13,7 +13,7 @@ const zh: Dictionary = {
   },
   nav: [
     { label: "我是谁", href: "/about" },
-    { label: "写作", href: "/blog" },
+    { label: "随便写写", href: "/blog" },
   ],
   common: {
     readMore: "阅读更多",

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { PageHeader } from "@/components/shared/PageHeader";
+import { WritingPageHero } from "@/components/blog/WritingPageHero";
 import { WritingCategoryNav } from "@/components/blog/WritingCategoryNav";
 import { BlogPostGrid } from "@/components/blog/BlogPostGrid";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -80,27 +80,28 @@ export default async function BlogPage({
         ])}
       />
 
-      <PageHeader
+      <WritingPageHero
         label={dict.blog.subtitle}
         title={dict.blog.title}
         description={dict.blog.description}
         accent="coral"
-        interactiveTitle
         hiddenWords={dict.blog.hiddenWords}
       />
 
       <section className="pb-20 lg:pb-32">
         <div className="editorial-container">
           <div className="writing-filter-sticky">
-            <Suspense fallback={<div className="h-14" />}>
-              <WritingCategoryNav
-                categories={dict.blog.categories}
-                filterLabel={dict.blog.filterLabel}
-              />
-            </Suspense>
+            <div className="writing-filter-panel">
+              <Suspense fallback={<div className="h-14" />}>
+                <WritingCategoryNav
+                  categories={dict.blog.categories}
+                  filterLabel={dict.blog.filterLabel}
+                />
+              </Suspense>
+            </div>
           </div>
 
-          <div className="mt-10 lg:mt-14">
+          <div className="mt-8 lg:mt-10">
             <Suspense fallback={null}>
               <BlogPostGrid
                 posts={posts}

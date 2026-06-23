@@ -28,7 +28,7 @@ export function BlogPostGrid({
   }
 
   return (
-    <Stagger className="grid gap-4 sm:grid-cols-2 lg:gap-5">
+    <Stagger className="grid gap-5 sm:grid-cols-2 lg:gap-6">
       {posts.map((post) => (
         <StaggerItem key={post.id}>
           <BlogCard post={post} locale={locale} dict={dict} />
